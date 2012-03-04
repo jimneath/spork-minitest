@@ -3,13 +3,14 @@ class Spork::TestFramework::MiniTest < Spork::TestFramework
   HELPER_FILE = File.join(Dir.pwd, "test/test_helper.rb")
 
   def run_tests(argv, stderr, stdout)
-    puts "RUN TESTS"
-    puts argv.inspect
+    stdout.puts "RUN TESTS"
+    stdout.puts argv.inspect
     require "minitest/unit"
     $LOAD_PATH << "test" << "."
     ::MiniTest::Unit.output = stdout
 
     paths, opts = parse_options(argv)
+    stdout.puts "PATHS", paths, "OPTS", opts
 
     paths.each do |path|
       require path
@@ -20,7 +21,6 @@ class Spork::TestFramework::MiniTest < Spork::TestFramework
 
   def parse_options(argv)
     paths, opts = argv.slice_before("--").to_a
-    puts "PATHS", paths, "OPTS", opts
     paths ||= []
     opts ||= []
     opts.shift
